@@ -15,7 +15,6 @@
     -ms-user-select: none;
     user-select: none;
 
-    /* SKIDA PLAVI EFEKAT I OKVIR PRILIKOM KLIKA */
     -webkit-tap-highlight-color: transparent;
     outline: none;
 }
@@ -121,14 +120,13 @@ button:active{
     z-index:10;
 }
 
-/* --- IZMENJEN MODAL-BOX (Povećan prozor sa gornje i donje strane) --- */
 .modal-box{
     width:90%;
     max-width:500px;
-    max-height:92vh;            /* Povećano sa 80vh na 92vh za komotniji prikaz */
+    max-height:92vh;           
     overflow-y:auto;
     background: linear-gradient(145deg, #1e293b, #0f172a);
-    padding:25px 20px;          /* Smanjen padding da stane više sadržaja */
+    padding:25px 20px;         
     border-radius:30px;
     border:1px solid #ffffff20;
     text-align:center;
@@ -198,9 +196,8 @@ hr{ border:none; border-top:1px solid #475569; margin:20px 0; }
     -webkit-text-fill-color:transparent;
 }
 
-/* --- OPTIMIZACIJA ZA MOBILNE TELEFONE (do 600px širine) --- */
 @media (max-width:600px){
-    /* 1. Pravilo za sve ostale prozore na mobilnom (Uputstvo, Rekord, Podešavanja...) */
+    
     .modal-box{
         width:95%;
         max-height:95vh;
@@ -208,14 +205,13 @@ hr{ border:none; border-top:1px solid #475569; margin:20px 0; }
         border-radius:22px;
     }
 
-    /* 2. POSEBNO PRAVILO SAMO ZA PROZOR SA PITANJIMA (Glavna igra) */
     #gameModal .modal-box{
-        min-height: 85vh;     /* Povećava minimalnu visinu samo prozora za igru */
-        max-height: 98vh;     /* Dozvoljava mu da se raširi skoro od vrha do dna ekrana */
-        padding: 12px 10px;   /* Smanjuje unutrašnji prazan prostor gore/dole */
+        min-height: 85vh;     
+        max-height: 98vh;     
+        padding: 12px 10px;  
     }
 
-    /* Ostala podešavanja za elemente na mobilnom */
+    
     .logo{ font-size:34px; }
     .subtitle{ font-size:16px; }
     #question{ font-size:20px; }
@@ -225,7 +221,7 @@ hr{ border:none; border-top:1px solid #475569; margin:20px 0; }
     .info div{ padding:8px 10px; }
 }
 
-/* --- EFEKTI ZA TAČAN I NETAČAN ODGOVOR --- */
+    
 .btn-correct {
     background: linear-gradient(145deg, #22c55e, #15803d) !important;
     box-shadow: 0 0 20px #22c55e88 !important;
@@ -289,10 +285,10 @@ hr{ border:none; border-top:1px solid #475569; margin:20px 0; }
     </div>
 </div>
 
-<!-- PORUKA PODRŠKE (TOAST) -->
+    
 <div id="milestoneToast" class="milestone-toast"></div>
 
-<!-- UPUTSTVO -->
+    
 <div class="modal" id="helpModal">
     <div class="modal-box">
         <h2>📖 UPUTSTVO</h2>
@@ -305,7 +301,7 @@ hr{ border:none; border-top:1px solid #475569; margin:20px 0; }
     </div>
 </div>
 
-<!-- REKORD -->
+    
 <div class="modal" id="recordModal">
     <div class="modal-box">
         <h2>🏆 REKORD</h2>
@@ -315,7 +311,7 @@ hr{ border:none; border-top:1px solid #475569; margin:20px 0; }
     </div>
 </div>
 
-<!-- STATISTIKA -->
+    
 <div class="modal" id="statsModal">
     <div class="modal-box">
         <h2>📊 STATISTIKA</h2>
@@ -325,7 +321,7 @@ hr{ border:none; border-top:1px solid #475569; margin:20px 0; }
     </div>
 </div>
 
-<!-- PODEŠAVANJA -->
+    
 <div class="modal" id="settingsModal">
     <div class="modal-box">
         <h2>⚙ PODEŠAVANJA</h2>
@@ -336,7 +332,7 @@ hr{ border:none; border-top:1px solid #475569; margin:20px 0; }
     </div>
 </div>
 
-<!-- REŠENJA -->
+    
 <div class="modal" id="solutionsModal">
     <div class="modal-box">
         <h2>📖 REŠENJA</h2>
@@ -346,7 +342,7 @@ hr{ border:none; border-top:1px solid #475569; margin:20px 0; }
     </div>
 </div>
 
-<!-- IGRA -->
+    
 <div class="modal" id="gameModal">
     <div class="modal-box">
         <div class="info">
@@ -369,7 +365,7 @@ hr{ border:none; border-top:1px solid #475569; margin:20px 0; }
     </div>
 </div>
 
-<!-- PAUZA -->
+    
 <div class="modal" id="pauseModal">
     <div class="modal-box">
         <h2>⏸ PAUZA</h2>
@@ -380,7 +376,7 @@ hr{ border:none; border-top:1px solid #475569; margin:20px 0; }
     </div>
 </div>
 
-<!-- POBEDA -->
+    
 <div class="modal" id="winModal">
     <div class="modal-box">
         <h2>🏆 ČESTITAMO!</h2>
@@ -401,19 +397,19 @@ let correct = Number(localStorage.getItem("correct")) || 0;
 let sound = localStorage.getItem("sound") !== "false";
 let theme = localStorage.getItem("theme") || "neon";
 let seconds = Number(localStorage.getItem("time")) || 0;
-let order = [];   // čuva redosled (indekse) promešanih pitanja
+let order = [];  
 let timer;
 let topZ = 10;
 let audioCtx;
 
-// --- PORUKE PODRŠKE NA ODREĐENIM NIVOIMA ---
+    
 const milestoneMessages = {
     25: "Odlično ti ide! Prva četvrtina je savladana 🧠",
     50: "Pola puta je iza tebe, bravo! 🔥",
     75: "Još malo! Treća četvrtina je gotova 🚀"
 };
 
-// Baza pitanja (ubaci ostala pitanja do 100)
+    
 const questions = [
 
 {
@@ -1818,7 +1814,7 @@ function closeAll(){
     document.querySelectorAll(".modal").forEach(m => m.style.display = "none");
 }
 
-// --- PRIKAZ PORUKE PODRŠKE ---
+    
 let milestoneTimeout;
 function showMilestone(text){
     let toast = document.getElementById("milestoneToast");
@@ -1852,7 +1848,7 @@ function startGame(){
     updateContinueButton();
 }
 
-// --- NOVA FUNKCIJA ZA MEŠANJE ---
+    
 function shuffleQuestions(){
     order = questions.map((_, i) => i);
     for (let i = order.length - 1; i > 0; i--) {
@@ -1873,21 +1869,21 @@ function loadQuestion(){
         document.getElementById("figure").innerHTML = q.figure;
     }
 
-    // 1. Spajamo odgovore sa informacijom koji je tačan
+    
     let options = q.a.map((text, index) => {
         return { text: text, isCorrect: index === q.c };
     });
 
-    // 2. Nasumično mešamo redosled dugmića
+    
     for (let i = options.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * (i + 1));
         [options[i], options[j]] = [options[j], options[i]];
     }
 
-    // 3. Pamtimo gde je ispao tačan odgovor
+    
     currentCorrectIndex = options.findIndex(opt => opt.isCorrect);
 
-    // 4. Upisujemo tekst u dugmiće
+    
     let buttons = document.querySelectorAll("#answers button");
     buttons.forEach((b, i) => {
         b.innerHTML = options[i].text;
@@ -1896,8 +1892,8 @@ function loadQuestion(){
 
 function answer(id){
     let buttons = document.querySelectorAll("#answers button");
+
     
-    // Sprečavamo ponovne klikove dok traje animacija
     buttons.forEach(b => b.style.pointerEvents = "none");
 
     if(id === currentCorrectIndex){
@@ -1909,15 +1905,15 @@ function answer(id){
         score = Math.max(0, score - 20);
         playSound("wrong");
         buttons[id].classList.add("btn-wrong");
-        // Pokazujemo igraču koje je dugme bilo tačno
+        
         buttons[currentCorrectIndex].classList.add("btn-correct");
     }
 
     completed++;
 
-    // Pauza od pola sekunde (500ms) pre prelaska na sledeći nivo
+    
     setTimeout(() => {
-        // Vraćamo dugmiće u normalno stanje
+        
         buttons.forEach(b => {
             b.classList.remove("btn-correct", "btn-wrong");
             b.style.pointerEvents = "auto";
@@ -2010,9 +2006,8 @@ function playSound(type){
         audioCtx.resume();
     }
 
-    // --- SVEČANA MELODIJA ZA POBEDU (FANFARE) ---
     if(type === "win"){
-        let notes = [523.25, 659.25, 783.99, 1046.50, 1318.51]; // C5, E5, G5, C6, E6
+        let notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
         notes.forEach((freq, index) => {
             let osc = audioCtx.createOscillator();
             let gain = audioCtx.createGain();
@@ -2022,7 +2017,7 @@ function playSound(type){
             gain.connect(audioCtx.destination);
             
             let startTime = audioCtx.currentTime + (index * 0.12);
-            let noteDuration = index === notes.length - 1 ? 0.6 : 0.12; // Poslednji ton traje duže
+            let noteDuration = index === notes.length - 1 ? 0.6 : 0.12;
             
             gain.gain.setValueAtTime(0.2, startTime);
             gain.gain.exponentialRampToValueAtTime(0.001, startTime + noteDuration);
@@ -2033,7 +2028,7 @@ function playSound(type){
         return;
     }
 
-    // --- ZVUCI ZA OSTALE DOGAĐAJE ---
+    
     let osc = audioCtx.createOscillator();
     let gain = audioCtx.createGain();
 
@@ -2055,7 +2050,7 @@ function playSound(type){
 }
 
 function toggleTheme(){
-    // Dodate nove teme u niz:
+    
     const themes = ["neon", "light", "cyber", "matrix", "fire", "ocean", "retro", "forest", "gold", "dracula"];
     let nextIndex = (themes.indexOf(theme) + 1) % themes.length;
     theme = themes[nextIndex];
@@ -2122,7 +2117,7 @@ function applyTheme(){
         document.body.style.color = "#f38ba8";
         panel.style.background = "rgba(30,30,46,0.85)";
     } else {
-        // Podrazumevana (Neon)
+        
         document.body.style.background = "linear-gradient(135deg,#111827,#1f2937)";
         document.body.style.color = "white";
         panel.style.background = "rgba(15,23,42,0.75)";
@@ -2152,7 +2147,7 @@ function continueGame(){
     correct = Number(localStorage.getItem("correct")) || 0;
     seconds = Number(localStorage.getItem("time")) || 0;
 
-    // Učitaj sačuvani redosled pitanja; ako ne postoji ili se ne poklapa, napravi nov
+    
     let savedOrder = JSON.parse(localStorage.getItem("order") || "null");
     if(savedOrder && savedOrder.length === questions.length){
         order = savedOrder;
@@ -2221,7 +2216,7 @@ function updateContinueButton(){
     }
 }
 
-// Inicijalizacija
+    
 document.getElementById("bestScore").innerHTML = (localStorage.getItem("bestScore") || 0) + " poena";
 applyTheme();
 updateThemeButton();
