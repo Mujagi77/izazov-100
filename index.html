@@ -1,0 +1,2238 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧠 IZAZOV 100</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    /* SKIDA PLAVI EFEKAT I OKVIR PRILIKOM KLIKA */
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:linear-gradient(135deg,#111827,#1f2937);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+#app{
+    width:95%;
+    max-width:600px;
+    text-align:center;
+}
+
+.logo{
+    font-size:46px;
+    font-weight:900;
+    letter-spacing:2px;
+    margin-bottom:10px;
+    background:linear-gradient(90deg, #38bdf8, #a855f7, #facc15);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    text-shadow: 0 0 20px #38bdf855;
+    animation:logoPulse 3s infinite;
+}
+
+@keyframes logoPulse{
+    0%,100%{ transform:scale(1); }
+    50%{ transform:scale(1.03); }
+}
+
+.subtitle{
+    color:#cbd5e1;
+    margin-bottom:30px;
+}
+
+button{
+    width:80%;
+    max-width:350px;
+    padding:16px;
+    margin:10px;
+    border:none;
+    border-radius:20px;
+    font-size:18px;
+    font-weight:bold;
+    color:white;
+    cursor:pointer;
+    background:linear-gradient(145deg, #475569, #1e293b);
+    box-shadow: 0 8px 0 #0f172a, 0 12px 25px #0008, inset 0 2px 8px #ffffff40;
+    transition:.2s;
+}
+
+button:hover{
+    transform:translateY(-4px);
+    box-shadow: 0 12px 0 #0f172a, 0 18px 30px #0009, inset 0 3px 10px #ffffff60;
+}
+
+button:active{
+    transform:translateY(5px);
+    box-shadow: 0 3px 0 #0f172a, 0 6px 15px #0008;
+}
+
+.playBtn{ background:linear-gradient(145deg,#22c55e,#15803d); }
+.recordBtn{ background:linear-gradient(145deg,#facc15,#a16207); }
+.statsBtn{ background:linear-gradient(145deg,#a855f7,#6b21a8); }
+.helpBtn{ background:linear-gradient(145deg,#38bdf8,#0369a1); }
+.settingsBtn{ background:linear-gradient(145deg,#64748b,#1e293b); }
+
+.answerBtn{
+    background: linear-gradient(145deg, #334155, #0f172a);
+    width:45%;
+    display:inline-block;
+    margin:8px;
+}
+
+.answerBtn:hover{
+    background: linear-gradient(145deg, #38bdf8, #2563eb);
+}
+
+.panel{
+    background:rgba(15,23,42,0.75);
+    backdrop-filter:blur(12px);
+    padding:35px 25px;
+    border-radius:30px;
+    border:1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 20px 50px #0009, inset 0 1px 20px #ffffff10;
+}
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.75);
+    backdrop-filter:blur(8px);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:10;
+}
+
+/* --- IZMENJEN MODAL-BOX (Povećan prozor sa gornje i donje strane) --- */
+.modal-box{
+    width:90%;
+    max-width:500px;
+    max-height:92vh;            /* Povećano sa 80vh na 92vh za komotniji prikaz */
+    overflow-y:auto;
+    background: linear-gradient(145deg, #1e293b, #0f172a);
+    padding:25px 20px;          /* Smanjen padding da stane više sadržaja */
+    border-radius:30px;
+    border:1px solid #ffffff20;
+    text-align:center;
+    box-shadow: 0 25px 60px #000c, inset 0 2px 15px #ffffff15;
+    animation:show .3s;
+}
+
+@keyframes show{
+    from{ transform:scale(.7); opacity:0; }
+    to{ transform:scale(1); opacity:1; }
+}
+
+.info{
+    display:flex;
+    justify-content:space-around;
+    gap:10px;
+    margin-bottom:20px;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.info div{
+    background:rgba(255,255,255,0.08);
+    padding:10px 15px;
+    border-radius:15px;
+    border:1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 5px 15px #0006, inset 0 1px 5px #ffffff20;
+}
+
+body::before, body::after{
+    content:"";
+    position:fixed;
+    width:180px;
+    height:180px;
+    opacity:0.15;
+    z-index:-1;
+    animation:floatShape 8s infinite ease-in-out;
+}
+
+body::before{
+    background:#38bdf8;
+    border-radius:50%;
+    top:10%; left:10%;
+}
+
+body::after{
+    background:#a855f7;
+    transform:rotate(45deg);
+    bottom:10%; right:10%;
+}
+
+@keyframes floatShape{
+    0%,100%{ transform:translateY(0) rotate(0deg); }
+    50%{ transform:translateY(-30px) rotate(180deg); }
+}
+
+.hidden{ display:none; }
+#figure{ font-size:40px; margin:20px; min-height:60px; overflow-wrap: break-word; }
+hr{ border:none; border-top:1px solid #475569; margin:20px 0; }
+
+.modal-box h2{
+    font-size:28px;
+    margin-top:0;
+    letter-spacing:1px;
+    background:linear-gradient(90deg, #38bdf8, #a855f7);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+/* --- OPTIMIZACIJA ZA MOBILNE TELEFONE (do 600px širine) --- */
+@media (max-width:600px){
+    /* 1. Pravilo za sve ostale prozore na mobilnom (Uputstvo, Rekord, Podešavanja...) */
+    .modal-box{
+        width:95%;
+        max-height:95vh;
+        padding:18px 12px;
+        border-radius:22px;
+    }
+
+    /* 2. POSEBNO PRAVILO SAMO ZA PROZOR SA PITANJIMA (Glavna igra) */
+    #gameModal .modal-box{
+        min-height: 85vh;     /* Povećava minimalnu visinu samo prozora za igru */
+        max-height: 98vh;     /* Dozvoljava mu da se raširi skoro od vrha do dna ekrana */
+        padding: 12px 10px;   /* Smanjuje unutrašnji prazan prostor gore/dole */
+    }
+
+    /* Ostala podešavanja za elemente na mobilnom */
+    .logo{ font-size:34px; }
+    .subtitle{ font-size:16px; }
+    #question{ font-size:20px; }
+    #figure{ font-size:28px; margin:10px; }
+    .answerBtn{ width:92%; font-size:16px; padding:14px; margin:5px 0; }
+    .info{ font-size:13px; gap:5px; }
+    .info div{ padding:8px 10px; }
+}
+
+/* --- EFEKTI ZA TAČAN I NETAČAN ODGOVOR --- */
+.btn-correct {
+    background: linear-gradient(145deg, #22c55e, #15803d) !important;
+    box-shadow: 0 0 20px #22c55e88 !important;
+    transform: scale(1.05);
+}
+
+.btn-wrong {
+    background: linear-gradient(145deg, #ef4444, #991b1b) !important;
+    box-shadow: 0 0 20px #ef444488 !important;
+    animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px); }
+    40%, 80% { transform: translateX(8px); }
+}
+
+.milestone-toast{
+    position:fixed;
+    top:24px;
+    left:50%;
+    transform:translateX(-50%) translateY(-40px) scale(.9);
+    background:linear-gradient(145deg, #22c55e, #15803d);
+    color:white;
+    padding:16px 26px;
+    border-radius:20px;
+    font-weight:bold;
+    font-size:16px;
+    box-shadow: 0 15px 35px #000a, inset 0 1px 10px #ffffff40;
+    z-index:9999;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .35s ease, transform .35s ease;
+    text-align:center;
+    max-width:88%;
+    border:1px solid rgba(255,255,255,0.25);
+}
+
+.milestone-toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0) scale(1);
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+    <div class="panel">
+        <div class="logo">🧠 IZAZOV 100</div>
+        <div class="subtitle">100 logičkih izazova</div>
+
+        <button class="playBtn" onclick="startGame()">▶ IGRAJ</button>
+        <button id="continueBtn" onclick="continueGame()">▶ NASTAVI</button>
+        <button class="recordBtn" onclick="openModal('recordModal')">🏆 REKORD</button>
+        <button class="statsBtn" onclick="openModal('statsModal')">📊 STATISTIKA</button>
+        <button class="helpBtn" onclick="openModal('helpModal')">📖 UPUTSTVO</button>
+        <button class="settingsBtn" onclick="openModal('settingsModal')">⚙ PODEŠAVANJA</button>
+        <button class="helpBtn" onclick="openModal('solutionsModal')">📖 REŠENJA</button>
+    </div>
+</div>
+
+<!-- PORUKA PODRŠKE (TOAST) -->
+<div id="milestoneToast" class="milestone-toast"></div>
+
+<!-- UPUTSTVO -->
+<div class="modal" id="helpModal">
+    <div class="modal-box">
+        <h2>📖 UPUTSTVO</h2>
+        <p>Dobrodošli u IZAZOV 100!</p>
+        <p>Rešavajte logičke zadatke, pronađite pravila i testirajte svoj um.</p>
+        <p>Cilj je rešiti svih 100 izazova.</p>
+        <hr>
+        <p>👤 Autor:<br><b>mujagi77</b></p>
+        <button onclick="closeModal('helpModal')">NAZAD</button>
+    </div>
+</div>
+
+<!-- REKORD -->
+<div class="modal" id="recordModal">
+    <div class="modal-box">
+        <h2>🏆 REKORD</h2>
+        <p>Najbolji rezultat:</p>
+        <h3 id="bestScore">0 poena</h3>
+        <button onclick="closeModal('recordModal')">NAZAD</button>
+    </div>
+</div>
+
+<!-- STATISTIKA -->
+<div class="modal" id="statsModal">
+    <div class="modal-box">
+        <h2>📊 STATISTIKA</h2>
+        <p>Rešeni nivoi: <span id="completed">0</span></p>
+        <p>Tačnost: <span id="accuracy">0%</span></p>
+        <button onclick="closeModal('statsModal')">NAZAD</button>
+    </div>
+</div>
+
+<!-- PODEŠAVANJA -->
+<div class="modal" id="settingsModal">
+    <div class="modal-box">
+        <h2>⚙ PODEŠAVANJA</h2>
+        <button id="soundBtn" onclick="toggleSound()">🔊 Zvuk ON</button>
+        <button id="themeBtn" onclick="toggleTheme()">🌑 Neon</button>
+        <button onclick="resetGame()">🔄 Reset napretka</button>
+        <button onclick="closeModal('settingsModal')">NAZAD</button>
+    </div>
+</div>
+
+<!-- REŠENJA -->
+<div class="modal" id="solutionsModal">
+    <div class="modal-box">
+        <h2>📖 REŠENJA</h2>
+        <p>Rešeni zadaci će se ovde prikazivati.</p>
+        <div id="solutionsList"></div>
+        <button onclick="closeModal('solutionsModal')">NAZAD</button>
+    </div>
+</div>
+
+<!-- IGRA -->
+<div class="modal" id="gameModal">
+    <div class="modal-box">
+        <div class="info">
+            <div>Nivo: <span id="level">1</span>/100</div>
+            <div>⭐ <span id="score">0</span></div>
+            <div>⏱ <span id="time">00:00</span></div>
+        </div>
+        <hr>
+        <h2 id="question">Spremi se za izazov!</h2>
+        <div id="figure"></div>
+
+        <div id="answers">
+            <button class="answerBtn" onclick="answer(0)">Odgovor 1</button>
+            <button class="answerBtn" onclick="answer(1)">Odgovor 2</button>
+            <button class="answerBtn" onclick="answer(2)">Odgovor 3</button>
+            <button class="answerBtn" onclick="answer(3)">Odgovor 4</button>
+        </div>
+
+        <button onclick="openPause()">⏸ PAUZA</button>
+    </div>
+</div>
+
+<!-- PAUZA -->
+<div class="modal" id="pauseModal">
+    <div class="modal-box">
+        <h2>⏸ PAUZA</h2>
+        <button onclick="resumeGame()">▶ NASTAVI</button>
+        <button onclick="newGame()">🔄 NOVA IGRA</button>
+        <button onclick="closeGame()">🏠 MENI</button>
+        <button onclick="openModal('settingsModal')">⚙ PODEŠAVANJA</button>
+    </div>
+</div>
+
+<!-- POBEDA -->
+<div class="modal" id="winModal">
+    <div class="modal-box">
+        <h2>🏆 ČESTITAMO!</h2>
+        <p>Završili ste IZAZOV 100</p>
+        <hr>
+        <p>⭐ Poeni: <span id="finalScore">0</span></p>
+        <p>📊 Tačnost: <span id="finalAccuracy">0%</span></p>
+        <p>⏱ Vreme: <span id="finalTime">00:00</span></p>
+        <button onclick="closeGame()">🏠 MENI</button>
+    </div>
+</div>
+
+<script>
+let level = 1;
+let score = 0;
+let completed = Number(localStorage.getItem("completed")) || 0;
+let correct = Number(localStorage.getItem("correct")) || 0;
+let sound = localStorage.getItem("sound") !== "false";
+let theme = localStorage.getItem("theme") || "neon";
+let seconds = Number(localStorage.getItem("time")) || 0;
+let order = [];   // čuva redosled (indekse) promešanih pitanja
+let timer;
+let topZ = 10;
+let audioCtx;
+
+// --- PORUKE PODRŠKE NA ODREĐENIM NIVOIMA ---
+const milestoneMessages = {
+    25: "Odlično ti ide! Prva četvrtina je savladana 🧠",
+    50: "Pola puta je iza tebe, bravo! 🔥",
+    75: "Još malo! Treća četvrtina je gotova 🚀"
+};
+
+// Baza pitanja (ubaci ostala pitanja do 100)
+const questions = [
+
+{
+q:"Koji broj nedostaje u nizu?",
+figure:"2, 6, 12, 20, 30, ?",
+a:[
+"36",
+"40",
+"42",
+"44"
+],
+c:2,
+solution:"Razlike između brojeva rastu: +4, +6, +8, +10. Sledeća razlika je +12. 30+12=42."
+},
+
+{
+q:"Koji simbol nedostaje u nizu?",
+figure:"⭐ 🔵 🔵 ⭐ 🔵 🔵 ⭐ ?",
+a:[
+"⭐",
+"🔵",
+"⭐ ⭐",
+"🔴"
+],
+c:1,
+solution:"Obrazac je: jedna zvezda pa dva plava kruga. Nakon poslednje zvezde dolazi 🔵."
+},
+
+{
+q:"Ako je A=1, B=2, C=3... (prema engleskom alfabetu), koliko je zbir reči LOGIKA?",
+figure:"",
+a:[
+"48",
+"50",
+"55",
+"54"
+],
+c:2,
+solution:"L=12, O=15, G=7, I=9, K=11, A=1. Zbir je 12+15+7+9+11+1=55."
+},
+
+{
+q:"Koji broj nedostaje?",
+figure:"1, 4, 9, 16, 25, ?",
+a:[
+"30",
+"32",
+"36",
+"49"
+],
+c:2,
+solution:"Brojevi su kvadrati prirodnih brojeva: 1², 2², 3², 4², 5². Sledeći je 6²=36."
+},
+
+{
+q:"Koja reč ne pripada grupi?",
+figure:"Sat, Kalendar, Štoperica, Termometar",
+a:[
+"Sat",
+"Kalendar",
+"Štoperica",
+"Termometar"
+],
+c:3,
+solution:"Termometar meri temperaturu, dok ostali mere ili prikazuju vreme."
+},
+
+{
+q:"Svi NEX imaju plavu boju. Marko je NEX. Šta sigurno znamo?",
+figure:"",
+a:[
+"Marko je veliki",
+"Marko ima plavu boju",
+"Marko je čovek",
+"Ne znamo ništa"
+],
+c:1,
+solution:"Ako svi NEX imaju plavu boju, i Marko pripada grupi NEX, onda Marko sigurno ima plavu boju."
+},
+
+{
+q:"Koji broj nedostaje?",
+figure:"1, 8, 27, 64, ?",
+a:[
+"100",
+"125",
+"144",
+"216"
+],
+c:1,
+solution:"To su kubovi brojeva: 1³, 2³, 3³, 4³. Sledeće je 5³=125."
+},
+
+{
+q:"Ako je danas sreda, koji dan će biti za 10 dana?",
+figure:"",
+a:[
+"Petak",
+"Subota",
+"Nedelja",
+"Ponedeljak"
+],
+c:1,
+solution:"10 dana unapred od srede je subota."
+},
+
+{
+q:"Koji broj nedostaje?",
+figure:"2, 5, 10, 17, 26, ?",
+a:[
+"35",
+"37",
+"38",
+"40"
+],
+c:1,
+solution:"Razlike su +3, +5, +7, +9. Sledeća razlika je +11. 26+11=37."
+},
+
+{
+q:"Koji oblik ima najviše stranica?",
+figure:"",
+a:[
+"Trougao",
+"Kvadrat",
+"Petougao",
+"Trapez"
+],
+c:2,
+solution:"Petougao ima 5 stranica, više od trougla i kvadrata i trapeza."
+},
+
+{
+q:"Koji broj nedostaje?",
+figure:"2, 6, 12, 20, ?",
+a:[
+"28",
+"30",
+"32",
+"36"
+],
+c:1,
+solution:"Razlika raste: +4, +6, +8. Sledeća razlika je +10. 20+10=30."
+},
+
+
+{
+q:"Koji broj nedostaje?",
+figure:"8, 27, 64, 125, ?",
+a:[
+"196",
+"216",
+"225",
+"243"
+],
+c:1,
+solution:"Brojevi su kubovi: 2³=8, 3³=27, 4³=64, 5³=125. Sledeće je 6³=216."
+},
+
+
+{
+q:"Koji simbol nedostaje?",
+figure:"🔺 🔵 🟥, 🔵 🟥 🔺, 🟥 🔺 ?",
+a:[
+"🔵",
+"🟥",
+"🔺",
+"⭐"
+],
+c:0,
+solution:"Svaka grupa pomera redosled za jedno mesto. Sledeći simbol je 🔵."
+},
+
+
+{
+q:"Koji broj nedostaje?",
+figure:"81, 27, 9, 3, ?",
+a:[
+"1",
+"0",
+"6",
+"2"
+],
+c:0,
+solution:"Svaki broj se deli sa 3: 81÷3=27, 27÷3=9, 9÷3=3, 3÷3=1."
+},
+
+
+{
+q:"4 radnika završe posao za 12 dana. Koliko dana treba 8 radnika ako rade istom brzinom?",
+figure:"",
+a:[
+"3 dana",
+"4 dana",
+"6 dana",
+"8 dana"
+],
+c:2,
+solution:"Ukupan rad je 4×12=48 radnih dana. Sa 8 radnika: 48÷8=6 dana."
+},
+
+
+{
+q:"Koji mesec nedostaje?",
+figure:"JANUAR, MART, MAJ, JUL, ?",
+a:[
+"AVGUST",
+"SEPTEMBAR",
+"NOVEMBAR",
+"DECEMBAR"
+],
+c:1,
+solution:"Niz prikazuje svaki drugi neparni mesec: januar(1), mart(3), maj(5), jul(7), sledeći je septembar(9)."
+},
+
+
+{
+q:"Koji broj treba da zameni znak ?",
+figure:"2 × 3 = 8, 3 × 4 = 15, 4 × 5 = ?",
+a:[
+"24",
+"25",
+"26",
+"28"
+],
+c:0,
+solution:"Pravilo: prvi broj × drugi broj + prvi broj. 2×3+2=8, 3×4+3=15, 4×5+4=24."
+},
+
+
+{
+q:"Ako jedan trougao ima 3 ugla, koliko uglova imaju tri jednaka trougla zajedno?",
+figure:"",
+a:[
+"6",
+"9",
+"12",
+"15"
+],
+c:1,
+solution:"Jedan trougao ima 3 ugla. Tri trougla imaju 3×3=9 uglova."
+},
+
+
+{
+q:"Koje slovo nedostaje (prema engleskom alfabetu)?",
+figure:"A, D, H, M, ?",
+a:[
+"Q",
+"R",
+"S",
+"T"
+],
+c:2,
+solution:"Razmaci rastu: +3, +4, +5. Sledeći razmak je +6. M + 6 = S."
+},
+
+
+{
+q:"Ako je 2+3=10, 3+4=21, 4+5=36, koliko je 5+6?",
+figure:"",
+a:[
+"55",
+"60",
+"66",
+"72"
+],
+c:0,
+solution:"Pravilo je: prvi broj × (prvi broj + drugi broj). 2×(2+3)=10, 3×(3+4)=21, 4×(4+5)=36, 5×(5+6)=55."
+},
+
+
+{
+  q: "Oko je prema vidu kao uvo prema:",
+  figure: "",
+  a: [
+    "Sluhu",
+    "Mirisu",
+    "Dodiru",
+    "Ukusu"
+  ],
+  c: 0,
+  solution: "Oko je organ čula vida, a uvo je organ čula sluha."
+},
+
+
+{
+q:"Koja reč ne pripada grupi?",
+figure:"Januar, Mart, Maj, Nedelja",
+a:[
+"Januar",
+"Mart",
+"Maj",
+"Nedelja"
+],
+c:3,
+solution:"Nedelja nije mesec, ostale reči su meseci."
+},
+
+
+{
+
+q:"Ako je svaki trougao plav, a ovaj predmet nije plav, šta zaključujemo?",
+figure:"",
+a:[
+"Predmet je trougao",
+"Predmet nije trougao",
+"Predmet je krug",
+"Ne možemo znati"
+],
+c:1,
+solution:"Ako su svi trouglovi plavi, predmet koji nije plav ne može biti trougao."
+},
+
+
+{
+q:"Koji par nastavlja pravilo?",
+figure:"AZ, BY, CX, ?",
+a:[
+"DW",
+"EV",
+"FU",
+"GT"
+],
+c:0,
+solution:"Prvo slovo ide unapred: A,B,C,D. Drugo slovo ide unazad: Z,Y,X,W."
+},
+
+
+{
+q:"Petar je viši od Marka. Luka je niži od Petra, ali viši od Marka. Ko je drugi po visini?",
+figure:"",
+a:[
+"Petar",
+"Luka",
+"Marko",
+"Ne znamo"
+],
+c:1,
+solution:"Redosled je Petar, Luka, Marko. Luka je drugi po visini."
+},
+
+
+{
+
+q:"Ako je ★ + ★ = 10, a ★ + ● = 7, koliko je ●?",
+figure:"",
+a:[
+"2",
+"3",
+"4",
+"5"
+],
+c:0,
+solution:"Jedna zvezda vredi 5. 5 + ● = 7, zato je ● = 2."
+},
+
+
+{
+q:"Koji broj nedostaje?",
+figure:"3, 8, 18, 38, ?",
+a:[
+"74",
+"76",
+"78",
+"80"
+],
+c:2,
+solution:"Svaki broj se množi sa 2 i dodaje 2: 3×2+2=8, 8×2+2=18, 18×2+2=38, 38×2+2=78."
+},
+
+
+{
+q:"Koji oblik ne pripada grupi?",
+figure:"🔺 🔻 ◀️ ▶️ 🔵",
+a:[
+"🔺",
+"🔻",
+"🔵",
+"◀️"
+],
+c:2,
+solution:"Krug je jedini oblik koji nema stranice i uglove. Ostali su trouglovi ili imaju ivice."
+},
+
+
+{
+q:"Pet knjiga stoji na polici. Crvena je levo od plave. Zelena je desno od plave. Žuta je levo od crvene. Bela je desno od zelene. Koja knjiga je u sredini?",
+figure:"",
+a:[
+"Žuta",
+"Crvena",
+"Plava",
+"Zelena"
+],
+c:2,
+solution:"Redosled je: Žuta, Crvena, Plava, Zelena, Bela. Srednja knjiga je Plava."
+},
+
+
+{
+
+q:"Koji broj nedostaje?",
+figure:"1, 2, 6, 24, ?",
+a:[
+"48",
+"96",
+"120",
+"144"
+],
+c:2,
+solution:"Niz koristi množenje: 1×2=2, 2×3=6, 6×4=24, 24×5=120."
+},
+
+{
+q:"Koji broj nedostaje?",
+figure:"6, 11, 21, 41, ?",
+a:[
+"71",
+"81",
+"82",
+"83"
+],
+c:1,
+solution:"Svaki broj se množi sa 2 i oduzima 1: 6×2-1=11, 11×2-1=21, 21×2-1=41, 41×2-1=81."
+},
+
+
+{
+q:"Ako svaka reč ima onoliko bodova koliko ima slova, koliko bodova vredi reč INTELIGENCIJA?",
+figure:"",
+a:[
+"10",
+"11",
+"12",
+"13"
+],
+c:3,
+solution:"INTELIGENCIJA ima 13 slova."
+},
+
+{
+q:"Koji broj nedostaje?",
+figure:"80, 72, 61, 47, ?",
+a:[
+"30",
+"31",
+"32",
+"33"
+],
+c:0,
+solution:"Razlike su -8, -11, -14. Sledeća razlika je -17. 47-17=30."
+},
+
+
+{
+
+q:"Koji predmet je drugačiji?",
+figure:"Kašika, Viljuška, Nož, Telefon",
+a:[
+"Kašika",
+"Viljuška",
+"Nož",
+"Telefon"
+],
+c:3,
+solution:"Prva tri predmeta služe za jelo, telefon ne."
+},
+
+
+{
+
+q:"Ako je A=1, B=2, C=3... koliko je D+E+F?",
+figure:"",
+a:[
+"12",
+"15",
+"18",
+"21"
+],
+c:1,
+solution:"D=4, E=5, F=6. 4+5+6=15."
+},
+
+
+{
+
+q:"Koji broj dolazi sledeći?",
+figure:"3, 9, 27, 81, ?",
+a:[
+"162",
+"243",
+"324",
+"405"
+],
+c:1,
+solution:"Svaki broj se množi sa 3: 81×3=243."
+},
+
+
+{
+
+q:"Koja reč nastavlja niz?",
+figure:"Ponedeljak, Sreda, Petak, ?",
+a:[
+"Subota",
+"Nedelja",
+"Utorak",
+"Četvrtak"
+],
+c:1,
+solution:"Preskačemo po jedan dan: ponedeljak, sreda, petak, nedelja."
+},
+
+
+{
+q:"Petar je stariji od Marka. Marko je stariji od Jovana. Ko je najmlađi?",
+figure:"",
+a:[
+"Petar",
+"Marko",
+"Jovan",
+"Ne može se znati"
+],
+c:2,
+solution:"Redosled je Petar > Marko > Jovan, zato je Jovan najmlađi."
+},
+
+
+{
+
+q:"Koji broj nedostaje?",
+figure:"4, 8, 16, 32, ?",
+a:[
+"48",
+"56",
+"64",
+"72"
+],
+c:2,
+solution:"Brojevi se udvostručuju: 32×2=64."
+},
+
+
+{
+
+q:"Ana ima 3 brata. Svaki brat ima jednu sestru. Koliko dece ima u porodici?",
+figure:"",
+a:[
+"3",
+"4",
+"6",
+"7"
+],
+c:1,
+solution:"Tri brata dele istu sestru. Ukupno su 4 dece."
+},
+
+{
+"q": "Koji simbol nedostaje?",
+"figure": "🔴 🟡 🔴 🟢 🔴 ?",
+"a": [
+"🔴",
+"🟡",
+"🟢",
+"⚪"
+],
+"c": 1,
+"solution": "Crveni krug se pojavljuje na svakom neparnom mestu, dok se na parnim mestima naizmenično smenjuju žuti i zeleni. Sledeći na redu je žuti."
+},
+
+
+{
+q:"Koji broj nedostaje u tabeli?",
+figure:"2 → 6, 3 → 12, 4 → 20, 5 → ?",
+a:[
+"25",
+"30",
+"35",
+"40"
+],
+c:1,
+solution:"Pravilo je: broj se množi sa sledećim brojem. 2×3=6, 3×4=12, 4×5=20, 5×6=30."
+},
+
+
+{
+q:"Koji broj nedostaje?",
+figure:"3, 7, 13, 21, ?",
+a:[
+"29",
+"31",
+"33",
+"35"
+],
+c:1,
+solution:"Razlike su +4, +6, +8. Sledeća razlika je +10. 21+10=31."
+},
+
+
+{
+
+q:"Koji oblik ne pripada?",
+figure:"🔺 🔷 🔵 🟩",
+a:[
+"🔺",
+"🔷",
+"🔵",
+"🟩"
+],
+c:2,
+solution:"Krug je jedini oblik bez uglova."
+},
+
+
+{
+
+q:"Koji simbol nastavlja niz?",
+figure:"⬆️ ➡️ ⬇️ ⬅️ ?",
+a:[
+"⬆️",
+"➡️",
+"⬇️",
+"↗️"
+],
+c:0,
+solution:"Strelice se okreću za 90 stepeni: gore, desno, dole, levo, pa opet gore."
+},
+
+
+{
+
+q:"Koji broj nedostaje?",
+figure:"10, 20, 35, 55, ?",
+a:[
+"70",
+"80",
+"85",
+"90"
+],
+c:1,
+solution:"Razlike su +10, +15, +20. Sledeća razlika je +25. 55+25=80."
+},
+
+
+{
+q:"Ako je svaki MOK veći od 10, a neki veliki brojevi su parni. Broj 14 pripada grupi MOK. Šta sigurno znamo?",
+a:[
+"14 je paran broj",
+"14 je veći od 10",
+"14 je najveći broj",
+"Ne znamo ništa"
+],
+c:1,
+solution:"Pošto svi MOK brojevi moraju biti veći od 10, a 14 pripada grupi MOK, sigurno znamo da je 14 veći od 10."
+},
+
+
+{
+
+q:"Koji predmet ne pripada grupi?",
+figure:"⚽ 🏀 🎾 🚗",
+a:[
+"⚽",
+"🏀",
+"🎾",
+"🚗"
+],
+c:3,
+solution:"Tri simbola su lopte, automobil ne pripada grupi."
+},
+
+
+{
+
+q:"Koji broj nedostaje?",
+figure:"2, 6, 18, 54, ?",
+a:[
+"108",
+"162",
+"216",
+"270"
+],
+c:1,
+solution:"Svaki broj se množi sa 3. 54×3=162."
+},
+
+
+{
+
+q:"Koji oblik dolazi sledeći?",
+figure:"⚪ ⚫ ⚪ ⚫ ?",
+a:[
+"⚪",
+"⚫",
+"🔺",
+"🟥"
+],
+c:0,
+solution:"Obrazac se ponavlja: beli krug, crni krug. Sledeći je ⚪."
+},
+
+{
+
+q:"Koji simbol nedostaje?",
+figure:"🔺 🔵 🟥 🔵 🔺 🔵 ?",
+a:[
+"🔺",
+"🔵",
+"🟥",
+"⭐"
+],
+c:2,
+solution:"Obrazac je: trougao, krug, kvadrat, krug. Zatim se ponavlja. Nedostaje 🟥."
+},
+
+
+{
+
+q:"Koji simbol dolazi sledeći?",
+figure:"⬆️ ➡️ ⬇️ ⬅️ ⬆️ ?",
+a:[
+"⬇️",
+"➡️",
+"⬅️",
+"↗️"
+],
+c:1,
+solution:"Strelice se rotiraju za 90 stepeni u smeru kazaljke na satu (gore, desno, dole, levo). Ciklus počinje ispočetka sa 'gore', pa je sledeća strelica 'desno'."
+},
+
+
+{
+q:"Koji simbol nedostaje?",
+figure:"🔺 🔵 🟥 🔺 🔵 ?",
+a:[
+"🔺",
+"🔵",
+"🟥",
+"⭐"
+],
+c:2,
+solution:"Obrazac se ponavlja u grupama od tri simbola: trougao, krug, kvadrat. Posle 🔺 🔵 dolazi 🟥."
+},
+
+
+{
+
+q:"Koji simbol nedostaje?",
+figure:"🟦 🟥 🟦 🟥 🟦 ?",
+a:[
+"🟥",
+"🟦",
+"🟩",
+"⭐"
+],
+c:0,
+solution:"Dva oblika se stalno smenjuju. Posle plavog dolazi crveni."
+},
+
+
+{
+q:"Koji simbol dolazi sledeći?",
+figure:"⚪ 🔺 ⚫ 🔺 ⚪ 🔺 ?",
+a:[
+"⚫",
+"⚪",
+"🔺",
+"🟥"
+],
+c:0,
+solution:"Obrazac se sastoji od 4 simbola: beli krug, trougao, crni krug, trougao. Nakon drugog trougla niz se ponavlja, pa posle ⚪ 🔺 dolazi ⚫."
+},
+
+
+{
+
+q:"Koji simbol treba da bude na mestu pitanja?",
+figure:"⭐ 🔺 🔷 ⭐ 🔺 ?",
+a:[
+"⭐",
+"🔺",
+"🔷",
+"⚪"
+],
+c:2,
+solution:"Obrazac se ponavlja u grupama od tri simbola: zvezda, trougao, romb."
+},
+
+
+{
+
+q:"Koji smer nedostaje?",
+figure:"↖️ ↗️ ↘️ ↙️ ?",
+a:[
+"↖️",
+"➡️",
+"⬆️",
+"⬇️"
+],
+c:0,
+solution:"Strelice se kreću u krug: gore-levo, gore-desno, dole-desno, dole-levo, pa opet gore-levo."
+},
+
+
+{
+
+q:"Koji oblik dolazi sledeći?",
+figure:"🟢 🟢 🔴 🟢 🟢 🔴 ?",
+a:[
+"🟢",
+"🔴",
+"🔵",
+"🟡"
+],
+c:0,
+solution:"Obrazac je dva zelena, jedan crveni. Posle crvenog dolazi zeleni."
+},
+
+
+{
+
+q:"Koji simbol nedostaje?",
+figure:"🔷 🔶 🔷 🔶 🔷 ?",
+a:[
+"🔶",
+"🔷",
+"🟥",
+"⚫"
+],
+c:0,
+solution:"Simboli se smenjuju romb plavi, romb narandžasti. Sledeći je 🔶."
+},
+
+
+{
+
+q:"Koji oblik nastavlja niz?",
+figure:"⬛ ⬜ ⬛ ⬜ ⬛ ?",
+a:[
+"⬜",
+"⬛",
+"🔺",
+"🔵"
+],
+c:0,
+solution:"Crni i beli kvadrat se smenjuju. Posle crnog dolazi beli."
+},
+
+{
+  q:"Koji broj nedostaje?",
+  figure:"1, 1, 2, 3, 5, 8, 13, ?",
+  a:[
+    "18",
+    "20",
+    "21",
+    "24"
+  ],
+  c:2,
+  solution:"Fibonačijev niz: svaki broj je zbir prethodna dva. 8+13=21."
+},
+
+{
+  q:"Koji broj nedostaje?",
+  figure:"3, 8, 15, 24, 35, ?",
+  a:[
+    "46",
+    "48",
+    "50",
+    "54"
+  ],
+  c:1,
+  solution:"Razlike su 5,7,9,11,13 (neparni brojevi rastu za 2). 35+13=48."
+},
+
+{
+  q:"Koji oblik dolazi sledeći?",
+  figure:"🔺 🔺 🟦 🔺 🔺 🟦 🔺 🔺 ?",
+  a:[
+    "🔺",
+    "🟦",
+    "⚪",
+    "🟥"
+  ],
+  c:1,
+  solution:"Obrazac se ponavlja u grupama: dva trougla pa kvadrat (🔺🔺🟦). Posle poslednja dva trougla sledi 🟦."
+},
+
+{
+  q:"Fizika: Telo pada slobodnim padom 3 sekunde. Kolika je približno njegova brzina (g≈10 m/s²)?",
+  figure:"t = 3 s, v = ?",
+  a:[
+    "15 m/s",
+    "30 m/s",
+    "45 m/s",
+    "90 m/s"
+  ],
+  c:1,
+  solution:"v = g×t = 10×3 = 30 m/s."
+},
+
+{
+  q:"Koji broj nedostaje u nizu (svaki sledeći je proizvod prethodna dva umanjen za 1)?",
+  figure:"2, 3, 5, 14, ?",
+  a:[
+    "65",
+    "69",
+    "70",
+    "75"
+  ],
+  c:1,
+  solution:"5×14−1=69 (pravilo: (n-2)×(n-1)−1). Provera: 2×3−1=5, 3×5−1=14, 5×14−1=69."
+},
+
+{
+  q:"Fizika: Kolika je gustina tela mase 500 g koje zauzima zapreminu 250 cm³?",
+  figure:"m = 500 g, V = 250 cm³, ρ = ?",
+  a:[
+    "0,5 g/cm³",
+    "1 g/cm³",
+    "2 g/cm³",
+    "5 g/cm³"
+  ],
+  c:2,
+  solution:"ρ = m/V = 500/250 = 2 g/cm³."
+},
+
+{
+  q: "Kada se svi krugovi popune (⚫⚫⚫), koja prazna figura sledi?",
+  figure: "⚫⚪⚪   ⚫⚫⚪   ⚫⚫⚫   ?",
+  a: [
+    "⚪⚪⚪",
+    "⚫⚪⚪",
+    "⚫⚫⚪",
+    "⚪⚫⚫"
+  ],
+  c: 0,
+  solution: "Nakon pune figure (⚫⚫⚫), sledi potpuno prazna figura (⚪⚪⚪)."
+},
+
+{
+  q:"Koji broj nedostaje?",
+  figure:"4, 9, 19, 39, 79, ?",
+  a:[
+    "119",
+    "149",
+    "159",
+    "169"
+  ],
+  c:2,
+  solution:"Svaki sledeći broj je prethodni×2 + 1. 79×2+1=159."
+},
+
+{
+  q:"Fizika: Automobil se kreće brzinom 72 km/h. Kolika je njegova brzina u m/s?",
+  figure:"v = 72 km/h, v(m/s) = ?",
+  a:[
+    "10 m/s",
+    "15 m/s",
+    "20 m/s",
+    "25 m/s"
+  ],
+  c:2,
+  solution:"72 km/h = 72÷3,6 = 20 m/s."
+},
+
+{
+  q:"Koji oblik dolazi sledeći?",
+  figure:"🟦 🔺🔺 🟦 🔺🔺🔺 🟦 ?",
+  a:[
+    "🔺",
+    "🔺🔺",
+    "🔺🔺🔺🔺",
+    "🟦"
+  ],
+  c:2,
+  solution:"Broj trouglova između kvadrata povećava se za jedan u svakom koraku (2, pa 3). Posle kvadrata sledi grupa od 4 trougla (🔺🔺🔺🔺)."
+},
+
+{
+  q:"Koji broj nedostaje?",
+  figure:"5, 11, 23, 47, ?",
+  a:[
+    "90",
+    "93",
+    "95",
+    "97"
+  ],
+  c:2,
+  solution:"Svaki sledeći broj = prethodni×2+1. 47×2+1=95."
+},
+
+{
+  q:"Dopuni analogiju: Pisac je knjizi što slikar je _____.",
+  figure:"Pisac : Knjiga = Slikar : ?",
+  a:[
+    "Slici",
+    "Četkici",
+    "Bojama",
+    "Platnu"
+  ],
+  c:0,
+  solution:"Pisac stvara knjigu kao svoje delo; slikar stvara sliku kao svoje delo. Odnos stvaralac–delo."
+},
+
+{
+  q:"Koje slovo nedostaje u nizu?",
+  figure:"A, C, F, J, ?",
+  a:[
+    "L",
+    "N",
+    "O",
+    "P"
+  ],
+  c:2,
+  solution:"Pozicije slova: A(1), C(3), F(6), J(10) — razlike rastu 2,3,4. Sledeća razlika je 5: 10+5=15 = slovo O."
+},
+
+{
+  q:"Logička zagonetka: Svi sportisti su zdravi. Petar je zdrav. Da li je Petar sportista?",
+  figure:"Premisa: Sportisti → zdravi. Petar je zdrav.",
+  a:[
+    "Da",
+    "Ne",
+    "Ne može se zaključiti",
+    "Petar nije zdrav"
+  ],
+  c:2,
+  solution:"Iz 'svi sportisti su zdravi' ne sledi da su svi zdravi ljudi sportisti. Nema dovoljno podataka za zaključak."
+},
+
+{
+  q:"Koji broj ne pripada nizu?",
+  figure:"4, 9, 16, 20, 25",
+  a:[
+    "9",
+    "16",
+    "20",
+    "25"
+  ],
+  c:2,
+  solution:"4, 9, 16, 25 su potpuni kvadrati (2²,3²,4²,5²). Broj 20 ne pripada obrascu."
+},
+
+{
+  q:"Koji broj nedostaje?",
+  figure:"2, 5, 10, 17, 26, ?",
+  a:[
+    "35",
+    "36",
+    "37",
+    "39"
+  ],
+  c:2,
+  solution:"Razlike su 3,5,7,9,11 (neparni brojevi). 26+11=37. (Obrazac: n²+1)"
+},
+
+{
+  q:"Marku je danas 25 godina. Pre 5 godina bio je dva puta stariji od Ane tada. Koliko godina ima Ana danas?",
+  figure:"Marko(danas)=25, Marko(pre 5g)=2×Ana(pre 5g)",
+  a:[
+    "12",
+    "13",
+    "15",
+    "17"
+  ],
+  c:2,
+  solution:"Pre 5 godina Marko je imao 20. To je dva puta više od Anine tadašnje starosti, pa je Ana imala 10. Danas Ana ima 10+5=15."
+},
+
+{
+  q:"Koje slovo se dobija kada se slovo 'b' rotira za 180°?",
+  figure:"b → rotacija 180° → ?",
+  a:[
+    "d",
+    "p",
+    "q",
+    "b"
+  ],
+  c:2,
+  solution:"Rotacijom slova 'b' za 180° (naglavačke) dobija se oblik koji odgovara slovu 'q'."
+},
+
+{
+  q:"Koji broj nedostaje u matrici?",
+  figure:"2 4 6 / 4 8 12 / 6 12 ?",
+  a:[
+    "16",
+    "18",
+    "20",
+    "24"
+  ],
+  c:1,
+  solution:"Svako polje = 2×(broj reda)×(broj kolone). Za polje (3,3): 2×3×3=18."
+},
+
+{
+  q:"Ako se svako slovo šifruje svojom pozicijom u engleskom alfabetu, koja je tačna šifra za 'SLOVO'?",
+  figure:"S-L-O-V-O = ?",
+  a:[
+    "19-12-15-22-15",
+    "18-12-15-21-15",
+    "19-11-15-22-14",
+    "20-12-16-22-15"
+  ],
+  c:0,
+  solution:"S=19, L=12, O=15, V=22, O=15 (pozicije slova u engleskom alfabetu). Tačna šifra: 19-12-15-22-15."
+},
+
+{
+  q:"Koji simbol nedostaje u matrici 3x3?",
+  figure:"🔺🟦⚪ / 🟦⚪🔺 / ⚪🔺?",
+  a:["⚪","🔺","🟦","🟥"],
+  c:2,
+  solution:"Svaki red i kolona sadrže tačno po jedan 🔺, 🟦, ⚪ (Sudoku pravilo). U trećem redu nedostaje 🟦."
+},
+
+{
+  q:"Koji oblik dolazi sledeći u nizu?",
+  figure:"🔵🔵 🔺 🔵🔵🔵 🔺🔺 🔵🔵🔵🔵 ?",
+  a:["🔺","🔺🔺","🔺🔺🔺","🔵"],
+  c:2,
+  solution:"Broj krugova raste (2,3,4), a broj trouglova između njih raste (1,2,...). Posle 4 kruga sledi grupa od 3 trougla."
+},
+
+{
+  q:"Ako se figura rotira za 90° u smeru kazaljke na satu, kako će izgledati?",
+  figure:"◤ (gornji levi ugao popunjen)",
+  a:["◥ (gornji desni popunjen)","◣ (donji levi popunjen)","◢ (donji desni popunjen)","◤ (ostaje isto)"],
+  c:0,
+  solution:"Rotacijom za 90° u smeru kazaljke na satu, popunjeni ugao se pomera za jedno mesto udesno: gornji levi ugao postaje gornji desni. Figura ◤ postaje ◥."
+},
+
+{
+  q:"Koliko trouglova ima na slici?",
+  figure:`
+<div style="display:flex;justify-content:center;align-items:center;">
+<svg width="180" height="160" viewBox="0 0 180 160">
+
+<!-- veliki trougao -->
+<polygon points="90,10 10,150 170,150"
+fill="none" stroke="white" stroke-width="3"/>
+
+<!-- linije sredina stranica -->
+<line x1="90" y1="10" x2="90" y2="150"
+stroke="white" stroke-width="2"/>
+
+<line x1="10" y1="150" x2="130" y2="80"
+stroke="white" stroke-width="2"/>
+
+<line x1="170" y1="150" x2="50" y2="80"
+stroke="white" stroke-width="2"/>
+
+</svg>
+</div>
+`,
+  a:["12","16","6","8"],
+  c:1,
+  solution:"6 malih + 3 srednja + 6 polutrouglova + 1 veliki = 16 trouglova ukupno."
+},
+
+{
+  q: "Koji simbol nedostaje da se završi dijagonala?",
+  figure: `
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px;font-size:22px;letter-spacing:4px;font-family:monospace;">
+  <div>⚪ ⚫ ⚫</div>
+  <div>⚫ ⚪ ⚫</div>
+  <div>⚫ ⚫ <span style="color:#4f46e5;font-weight:bold;">?</span></div>
+</div>
+`,
+  a: [
+    "⚪",
+    "⚫",
+    "⚪⚪",
+    "⚫⚫"
+  ],
+  c: 0,
+  solution: "U svakom redu beli krug (⚪) pomera se za jedno mesto udesno, praveći dijagonalu. Na poslednjem mestu nedostaje ⚪."
+},
+
+{
+  q:"Koji oblik je 'crna ovca' u nizu?",
+  figure:"⬠ ⬠ ⬠ ⬡ ⬠ ⬠",
+  a:["Prvi ⬠","Četvrti (⬡)","Poslednji ⬠","Drugi ⬠"],
+  c:1,
+  solution:"Svi ostali oblici imaju 5 stranica (peteugao), dok četvrti oblik ima 6 stranica (šestougao) — ne pripada nizu."
+},
+
+{
+  q: "Koja figura nastaje kada se crni delovi obe figure spoje?",
+  figure: `
+<div style="display:flex;justify-content:center;align-items:center;gap:18px;">
+    <!-- Leva crna polovina -->
+    <div style="width:70px;height:70px;border:2px solid #fff;border-radius:50%;
+    background:linear-gradient(to right, #000 50%, #fff 50%);"></div>
+
+    <span style="font-size:48px;color:#fff;">+</span>
+
+    <!-- Desna crna polovina -->
+    <div style="width:70px;height:70px;border:2px solid #fff;border-radius:50%;
+    background:linear-gradient(to right, #fff 50%, #000 50%);"></div>
+
+    <span style="font-size:48px;color:#fff;">= ?</span>
+</div>
+`,
+  a: [
+    "○ (prazan krug)",
+    "● (ceo crni krug)",
+    "◐ (jedna polovina)",
+    "◑ (druga polovina)"
+  ],
+  c: 1,
+  solution: "Prva figura ima crnu levu polovinu, a druga crnu desnu polovinu. Njihovim spajanjem dobija se ● (potpuno crni krug)."
+},
+
+{
+  q:"Koliko strelica pokazuje isti pravac kao većina?",
+  figure:"→ → ← → → ↑ → →",
+  a:["5","6","7","8"],
+  c:1,
+  solution:"Od ukupno 8 strelica: 6 pokazuje desno (→), 1 levo (←), 1 gore (↑). Većina (6) pokazuje isti pravac — desno."
+},
+
+{
+  q:"Koji oblik nedostaje da bi se ciklični obrazac zatvorio?",
+  figure:"🟥🟦🟨 / 🟨🟥🟦 / 🟦🟨?",
+  a:["🟥","🟦","🟨","⚪"],
+  c:0,
+  solution:"Svaki red je prethodni pomeren za jedno mesto udesno (ciklično): 🟥🟦🟨 → 🟨🟥🟦 → 🟦🟨🟥. Nedostaje 🟥."
+},
+
+{
+  q:"Koliko ukupno kvadrata (svih veličina) ima na slici mreže 3×3 (linije koje formiraju kvadrate 1×1, 2×2 i 3×3)?",
+  figure:`
+<div style="
+display:grid;
+grid-template-columns:repeat(3,60px);
+grid-template-rows:repeat(3,60px);
+width:180px;
+margin:auto;
+border:2px solid #fff;">
+<div style="border:1px solid #fff;"></div>
+<div style="border:1px solid #fff;"></div>
+<div style="border:1px solid #fff;"></div>
+<div style="border:1px solid #fff;"></div>
+<div style="border:1px solid #fff;"></div>
+<div style="border:1px solid #fff;"></div>
+<div style="border:1px solid #fff;"></div>
+<div style="border:1px solid #fff;"></div>
+<div style="border:1px solid #fff;"></div>
+</div>
+`,
+  a:["9","12","14","16"],
+  c:2,
+  solution:"Kvadrata 1×1 ima 9, kvadrata 2×2 ima 4, kvadrata 3×3 ima 1. Ukupno: 9+4+1=14."
+},
+
+{
+  q:"Koji broj nedostaje?",
+  figure:"7, 13, 25, 49, ?",
+  a:["97","95","99","101"],
+  c:0,
+  solution:"Svaki broj = prethodni×2−1. 49×2−1=97."
+},
+
+{
+  q:"Koji simbol je višak?",
+  figure:"🔷🔷🔷🔶🔷🔷",
+  a:["1.","4.","6.","2."],
+  c:1,
+  solution:"Svi su 🔷 osim četvrtog koji je 🔶 — različita boja/oblik."
+},
+
+{
+  q:"Koji broj nedostaje?",
+  figure:"100, 50, 48, 24, 22, ?",
+  a:["11","20","44","10"],
+  c:0,
+  solution:"Naizmenično: ÷2, −2, ÷2, −2... 22÷2=11."
+},
+
+{
+  q:"Ako je KOD = 11-15-4 prema engleskom alfabetu, šta je NIT?",
+  figure:"K=11, O=15, D=4 → NIT=?",
+  a:["14-9-20","13-8-19","14-9-19","15-9-20"],
+  c:0,
+  solution:"N=14, I=9, T=20 (pozicije u engleskom alfabetu)."
+},
+
+{
+  q: "Koji krug nedostaje na mestu znaka pitanja?",
+  figure: `
+<div style="display:flex;justify-content:center;align-items:center;gap:14px;padding:10px;font-size:22px;letter-spacing:2px;">
+  <span>🟢🟢⚪</span>
+  <span style="color:#aaa;font-size:18px;">→</span>
+  <span>🟢⚪⚪</span>
+  <span style="color:#aaa;font-size:18px;">→</span>
+  <span>⚪⚪<span style="color:#4f46e5;font-weight:bold;">?</span></span>
+</div>
+`,
+  a: [
+    "⚪",
+    "🟢",
+    "🔵",
+    "🟡"
+  ],
+  c: 0,
+  solution: "Broj zelenih krugova se smanjuje za jedan (2 → 1 → 0). U trećoj grupi nema zelenih krugova, pa na mestu znaka pitanja nedostaje ⚪."
+},
+
+{
+  q:"Tri prijatelja imaju ukupno 30 godina. Ana je 2x starija od Bore, Bora je 2x mlađi od Cece. Koliko ima Cecа?",
+  figure:"A+B+C=30, A=2B, C=2B",
+  a:["12","15","10","18"],
+  c:0,
+  solution:"A=2B, C=2B → 2B+B+2B=30 → 5B=30 → B=6, C=2×6=12."
+},
+
+{
+  q:"Koje slovo nastavlja niz?",
+  figure:"Z, X, V, T, ?",
+  a:["S","R","Q","P"],
+  c:1,
+  solution:"Svako slovo preskače jedno unazad (Z-Y-X, X-W-V...), znači svaki drugi unazad: Z,X,V,T,R."
+},
+
+{
+  q:"Koji broj je uljez?",
+  figure:"121, 144, 169, 200, 225",
+  a:["144","169","200","225"],
+  c:2,
+  solution:"121=11², 144=12², 169=13², 225=15² — svi su potpuni kvadrati osim 200."
+},
+
+{
+  q: "Koja figura nedostaje?",
+  figure: `
+<div style="display:flex;justify-content:center;align-items:center;gap:12px;padding:8px;flex-wrap:nowrap;">
+  <!-- Grupa 1 (1 gore, 1 dole) -->
+  <div style="display:flex;gap:3px;align-items:center;background:rgba(255,255,255,0.05);padding:6px 8px;border-radius:6px;">
+    <svg width="18" height="18" viewBox="0 0 24 24"><polygon points="12,2 22,20 2,20" fill="#ffffff"/></svg>
+    <svg width="18" height="18" viewBox="0 0 24 24"><polygon points="2,4 22,4 12,22" fill="#ffffff"/></svg>
+  </div>
+
+  <!-- Grupa 2 (2 gore, 2 dole) -->
+  <div style="display:flex;gap:3px;align-items:center;background:rgba(255,255,255,0.05);padding:6px 8px;border-radius:6px;">
+    <svg width="18" height="18" viewBox="0 0 24 24"><polygon points="12,2 22,20 2,20" fill="#ffffff"/></svg>
+    <svg width="18" height="18" viewBox="0 0 24 24"><polygon points="12,2 22,20 2,20" fill="#ffffff"/></svg>
+    <svg width="18" height="18" viewBox="0 0 24 24"><polygon points="2,4 22,4 12,22" fill="#ffffff"/></svg>
+    <svg width="18" height="18" viewBox="0 0 24 24"><polygon points="2,4 22,4 12,22" fill="#ffffff"/></svg>
+  </div>
+
+  <!-- Grupa 3 (3 gore, 3 dole) -->
+  <div style="display:flex;gap:3px;align-items:center;background:rgba(255,255,255,0.05);padding:6px 8px;border-radius:6px;">
+    <svg width="18" height="18" viewBox="0 0 24 24"><polygon points="12,2 22,20 2,20" fill="#ffffff"/></svg>
+    <svg width="18" height="18" viewBox="0 0 24 24"><polygon points="12,2 22,20 2,20" fill="#ffffff"/></svg>
+    <svg width="18" height="18" viewBox="0 0 24 24"><polygon points="12,2 22,20 2,20" fill="#ffffff"/></svg>
+    <svg width="18" height="18" viewBox="0 0 24 24"><polygon points="2,4 22,4 12,22" fill="#ffffff"/></svg>
+    <svg width="18" height="18" viewBox="0 0 24 24"><polygon points="2,4 22,4 12,22" fill="#ffffff"/></svg>
+    <svg width="18" height="18" viewBox="0 0 24 24"><polygon points="2,4 22,4 12,22" fill="#ffffff"/></svg>
+  </div>
+
+  <span style="font-size:22px;font-weight:bold;color:#ffffff;margin-left:4px;">?</span>
+</div>
+`,
+  a: [
+    "▲▲▲▲▼▼▼",
+    "▲▲▲▲▼▼▼▼",
+    "▲▼▼▼",
+    "▲▲▼"
+  ],
+  c: 1,
+  solution: "Broj trouglova okrenutih nagore i nadole raste podjednako (1, 2, 3 → 4): sledi 4▲ i 4▼ (▲▲▲▲▼▼▼▼)."
+},
+
+{
+  q:"Ako A=1, B=2, C=3..., (prema engleskom alfabetu), kolika je vrednost reči 'DAN'?",
+  figure:"D+A+N=?",
+  a:["19","18","20","17"],
+  c:0,
+  solution:"D=4, A=1, N=14 → 4+1+14=19."
+},
+    
+];
+
+function openModal(id){
+    topZ++;
+    let modal = document.getElementById(id);
+    modal.style.zIndex = topZ;
+    modal.style.display = "flex";
+
+    if(id === "solutionsModal"){
+        loadSolutions();
+    }
+}
+
+function closeModal(id){
+    document.getElementById(id).style.display = "none";
+}
+
+function closeAll(){
+    document.querySelectorAll(".modal").forEach(m => m.style.display = "none");
+}
+
+// --- PRIKAZ PORUKE PODRŠKE ---
+let milestoneTimeout;
+function showMilestone(text){
+    let toast = document.getElementById("milestoneToast");
+    toast.innerHTML = text;
+    toast.classList.add("show");
+    playSound("level");
+
+    clearTimeout(milestoneTimeout);
+    milestoneTimeout = setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2600);
+}
+
+function startGame(){
+    localStorage.removeItem("finished");
+    shuffleQuestions();
+    level = 1;
+    score = 0;
+    completed = 0;
+    correct = 0;
+    seconds = 0;
+
+    document.getElementById("level").innerHTML = level;
+    document.getElementById("score").innerHTML = score;
+
+    closeAll();
+    openModal("gameModal");
+    startTimer();
+    loadQuestion();
+    save();
+    updateContinueButton();
+}
+
+// --- NOVA FUNKCIJA ZA MEŠANJE ---
+function shuffleQuestions(){
+    order = questions.map((_, i) => i);
+    for (let i = order.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [order[i], order[j]] = [order[j], order[i]];
+    }
+    localStorage.setItem("order", JSON.stringify(order));
+}
+
+let currentCorrectIndex = 0;
+
+function loadQuestion(){
+    document.getElementById("figure").innerHTML = "";
+    let q = questions[order[(level - 1) % order.length]];
+
+    document.getElementById("question").innerHTML = q.q;
+    if(q.figure){
+        document.getElementById("figure").innerHTML = q.figure;
+    }
+
+    // 1. Spajamo odgovore sa informacijom koji je tačan
+    let options = q.a.map((text, index) => {
+        return { text: text, isCorrect: index === q.c };
+    });
+
+    // 2. Nasumično mešamo redosled dugmića
+    for (let i = options.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [options[i], options[j]] = [options[j], options[i]];
+    }
+
+    // 3. Pamtimo gde je ispao tačan odgovor
+    currentCorrectIndex = options.findIndex(opt => opt.isCorrect);
+
+    // 4. Upisujemo tekst u dugmiće
+    let buttons = document.querySelectorAll("#answers button");
+    buttons.forEach((b, i) => {
+        b.innerHTML = options[i].text;
+    });
+}
+
+function answer(id){
+    let buttons = document.querySelectorAll("#answers button");
+    
+    // Sprečavamo ponovne klikove dok traje animacija
+    buttons.forEach(b => b.style.pointerEvents = "none");
+
+    if(id === currentCorrectIndex){
+        score += 100;
+        correct++;
+        playSound("correct");
+        buttons[id].classList.add("btn-correct");
+    } else {
+        score = Math.max(0, score - 20);
+        playSound("wrong");
+        buttons[id].classList.add("btn-wrong");
+        // Pokazujemo igraču koje je dugme bilo tačno
+        buttons[currentCorrectIndex].classList.add("btn-correct");
+    }
+
+    completed++;
+
+    // Pauza od pola sekunde (500ms) pre prelaska na sledeći nivo
+    setTimeout(() => {
+        // Vraćamo dugmiće u normalno stanje
+        buttons.forEach(b => {
+            b.classList.remove("btn-correct", "btn-wrong");
+            b.style.pointerEvents = "auto";
+        });
+
+        if(level >= 100){
+            finishGame();
+            return;
+        }
+
+        level++;
+        updateStats();
+        playSound("level");
+
+        document.getElementById("score").innerHTML = score;
+        document.getElementById("level").innerHTML = level;
+
+        loadQuestion();
+        save();
+        if(milestoneMessages[completed]){
+            showMilestone(milestoneMessages[completed]);
+        }
+    }, 500);
+}
+
+function updateStats(){
+    let accuracy = completed > 0 ? Math.round((correct / completed) * 100) : 0;
+    document.getElementById("completed").innerHTML = completed;
+    document.getElementById("accuracy").innerHTML = accuracy + "%";
+}
+
+function startTimer(){
+    clearInterval(timer);
+    timer = setInterval(() => {
+        seconds++;
+        localStorage.setItem("time", seconds);
+
+        let m = Math.floor(seconds / 60);
+        let s = seconds % 60;
+        document.getElementById("time").innerHTML = String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+    }, 1000);
+}
+
+function finishGame(){
+    clearInterval(timer);
+    playSound("win");
+
+    document.getElementById("finalScore").innerHTML = score;
+    let accuracy = completed > 0 ? Math.round((correct / completed) * 100) : 0;
+    document.getElementById("finalAccuracy").innerHTML = accuracy + "%";
+    document.getElementById("finalTime").innerHTML = document.getElementById("time").innerHTML;
+
+    openModal("winModal");
+    localStorage.setItem("finished", "true");
+    save();
+    updateContinueButton();
+}
+
+function openPause(){
+    clearInterval(timer);
+    openModal("pauseModal");
+}
+
+function resumeGame(){
+    closeModal("pauseModal");
+    startTimer();
+}
+
+function closeGame(){
+    closeAll();
+    clearInterval(timer);
+    updateContinueButton();
+}
+
+function toggleSound(){
+    sound = !sound;
+    localStorage.setItem("sound", sound);
+    let btn = document.getElementById("soundBtn");
+    btn.innerHTML = sound ? "🔊 Zvuk ON" : "🔇 Zvuk OFF";
+    if(sound) playSound("click");
+}
+
+function playSound(type){
+    if(!sound) return;
+
+    if(!audioCtx){
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if(audioCtx.state === 'suspended'){
+        audioCtx.resume();
+    }
+
+    // --- SVEČANA MELODIJA ZA POBEDU (FANFARE) ---
+    if(type === "win"){
+        let notes = [523.25, 659.25, 783.99, 1046.50, 1318.51]; // C5, E5, G5, C6, E6
+        notes.forEach((freq, index) => {
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            
+            osc.frequency.value = freq;
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            let startTime = audioCtx.currentTime + (index * 0.12);
+            let noteDuration = index === notes.length - 1 ? 0.6 : 0.12; // Poslednji ton traje duže
+            
+            gain.gain.setValueAtTime(0.2, startTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, startTime + noteDuration);
+            
+            osc.start(startTime);
+            osc.stop(startTime + noteDuration);
+        });
+        return;
+    }
+
+    // --- ZVUCI ZA OSTALE DOGAĐAJE ---
+    let osc = audioCtx.createOscillator();
+    let gain = audioCtx.createGain();
+
+    let freq = 400;
+    let duration = 0.1;
+
+    if(type=="click"){ freq=500; duration=0.05; }
+    if(type=="correct"){ freq=900; duration=0.15; }
+    if(type=="wrong"){ freq=200; duration=0.2; }
+    if(type=="level"){ freq=1200; duration=0.3; }
+
+    osc.frequency.value = freq;
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    gain.gain.value = 0.15;
+
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+}
+
+function toggleTheme(){
+    // Dodate nove teme u niz:
+    const themes = ["neon", "light", "cyber", "matrix", "fire", "ocean", "retro", "forest", "gold", "dracula"];
+    let nextIndex = (themes.indexOf(theme) + 1) % themes.length;
+    theme = themes[nextIndex];
+
+    localStorage.setItem("theme", theme);
+    applyTheme();
+    updateThemeButton();
+}
+
+function updateThemeButton(){
+    let btn = document.getElementById("themeBtn");
+    const names = { 
+        neon: "🌑 Neon", 
+        light: "☀️ Light", 
+        cyber: "🟣 Cyber", 
+        matrix: "🟢 Matrix", 
+        fire: "🔥 Fire",
+        ocean: "🌊 Ocean",
+        retro: "👾 Retro",
+        forest: "🌲 Forest",
+        gold: "👑 Gold",
+        dracula: "☠️ Dracula"
+    };
+    btn.innerHTML = names[theme] || "🌑 Neon";
+}
+
+function applyTheme(){
+    let panel = document.querySelector(".panel");
+
+    if(theme === "light"){
+        document.body.style.background = "linear-gradient(135deg,#e2e8f0,#ffffff)";
+        document.body.style.color = "#111827";
+        panel.style.background = "rgba(255,255,255,0.85)";
+    } else if(theme === "cyber"){
+        document.body.style.background = "linear-gradient(135deg,#3b0764,#0f172a)";
+        document.body.style.color = "white";
+        panel.style.background = "rgba(59,7,100,0.75)";
+    } else if(theme === "matrix"){
+        document.body.style.background = "linear-gradient(135deg,#001100,#003300)";
+        document.body.style.color = "#00ff66";
+        panel.style.background = "rgba(0,50,0,0.75)";
+    } else if(theme === "fire"){
+        document.body.style.background = "linear-gradient(135deg,#450a0a,#f97316)";
+        document.body.style.color = "white";
+        panel.style.background = "rgba(80,20,0,0.75)";
+    } else if(theme === "ocean"){
+        document.body.style.background = "linear-gradient(135deg,#0284c7,#0f172a)";
+        document.body.style.color = "#e0f2fe";
+        panel.style.background = "rgba(12,74,110,0.8)";
+    } else if(theme === "retro"){
+        document.body.style.background = "linear-gradient(135deg,#831843,#312e81)";
+        document.body.style.color = "#f472b6";
+        panel.style.background = "rgba(88,28,135,0.8)";
+    } else if(theme === "forest"){
+        document.body.style.background = "linear-gradient(135deg,#064e3b,#022c22)";
+        document.body.style.color = "#6ee7b7";
+        panel.style.background = "rgba(6,78,59,0.8)";
+    } else if(theme === "gold"){
+        document.body.style.background = "linear-gradient(135deg,#78350f,#451a03)";
+        document.body.style.color = "#fef08a";
+        panel.style.background = "rgba(120,53,15,0.8)";
+    } else if(theme === "dracula"){
+        document.body.style.background = "linear-gradient(135deg,#181825,#11111b)";
+        document.body.style.color = "#f38ba8";
+        panel.style.background = "rgba(30,30,46,0.85)";
+    } else {
+        // Podrazumevana (Neon)
+        document.body.style.background = "linear-gradient(135deg,#111827,#1f2937)";
+        document.body.style.color = "white";
+        panel.style.background = "rgba(15,23,42,0.75)";
+    }
+}
+
+function resetGame(){
+    if(confirm("Da li ste sigurni da želite da obrišete sav napredak?")){
+        localStorage.clear();
+        location.reload();
+    }
+}
+
+function newGame(){
+    startGame();
+}
+
+function continueGame(){ 
+    if(localStorage.getItem("finished") == "true"){
+        newGame();
+        return;
+    }
+
+    level = Number(localStorage.getItem("izazovLevel")) || 1;
+    score = Number(localStorage.getItem("izazovScore")) || 0;
+    completed = Number(localStorage.getItem("completed")) || 0;
+    correct = Number(localStorage.getItem("correct")) || 0;
+    seconds = Number(localStorage.getItem("time")) || 0;
+
+    // Učitaj sačuvani redosled pitanja; ako ne postoji ili se ne poklapa, napravi nov
+    let savedOrder = JSON.parse(localStorage.getItem("order") || "null");
+    if(savedOrder && savedOrder.length === questions.length){
+        order = savedOrder;
+    } else {
+        shuffleQuestions();
+    }
+
+    updateStats();
+    document.getElementById("level").innerHTML = level;
+    document.getElementById("score").innerHTML = score;
+
+    closeAll();
+    openModal("gameModal");
+    startTimer();
+    loadQuestion();
+}
+
+function save(){
+    localStorage.setItem("izazovScore", score);
+    localStorage.setItem("izazovLevel", level);
+    localStorage.setItem("completed", completed);
+    localStorage.setItem("correct", correct);
+    localStorage.setItem("time", seconds);
+
+    let best = Number(localStorage.getItem("bestScore")) || 0;
+    if(score > best){
+        localStorage.setItem("bestScore", score);
+        document.getElementById("bestScore").innerHTML = score + " poena";
+    }
+}
+
+function loadSolutions(){
+    let list = document.getElementById("solutionsList");
+    list.innerHTML = "";
+
+    for(let i = 0; i < 100; i++){
+        let q = questions[order[i]];
+        if(i < completed && q){
+            list.innerHTML += `
+                <div>
+                    <h3>✅ Zadatak ${i+1}</h3>
+                    <p>${q.solution || "Nema dodato rešenje."}</p>
+                </div>
+                <hr>
+            `;
+        } else if(i === completed){
+            list.innerHTML += `<p>🔓 Zadatak ${i+1}</p>`;
+        } else {
+            list.innerHTML += `<p>🔒 Zadatak ${i+1}</p>`;
+        }
+    }
+}
+
+function updateContinueButton(){
+    let btn = document.getElementById("continueBtn");
+    let play = document.querySelector(".playBtn");
+
+    if(localStorage.getItem("finished") == "true"){
+        btn.innerHTML = "🔄 NOVA IGRA";
+        btn.onclick = newGame;
+        play.style.display = "none";
+    } else {
+        btn.innerHTML = "▶ NASTAVI";
+        btn.onclick = continueGame;
+        play.style.display = "inline-block";
+    }
+}
+
+// Inicijalizacija
+document.getElementById("bestScore").innerHTML = (localStorage.getItem("bestScore") || 0) + " poena";
+applyTheme();
+updateThemeButton();
+updateStats();
+updateContinueButton();
+
+document.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("click", () => {
+        playSound("click");
+    });
+});
+</script>
+</body>
+</html>
