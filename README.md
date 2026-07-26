@@ -29,4 +29,4 @@ Cilj je preći kompletan maraton od 100 logičkih zagonetki sa što većim proce
 
 ## 👤 Autor
 
-**mujagi77**.
+**mujagi77**
