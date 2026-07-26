@@ -96,8 +96,19 @@ button:active{
     margin:8px;
 }
 
-.answerBtn:hover{
-    background: linear-gradient(145deg, #38bdf8, #2563eb);
+    
+@media (hover: hover) and (pointer: fine) {
+    .answerBtn:hover {
+        background: linear-gradient(145deg, #38bdf8, #2563eb);
+    }
+}
+
+    
+@media (hover: none) {
+    .answerBtn:not(.btn-correct):not(.btn-wrong):hover,
+    .answerBtn:not(.btn-correct):not(.btn-wrong):focus {
+        background: linear-gradient(145deg, #334155, #0f172a);
+    }
 }
 
 .panel{
